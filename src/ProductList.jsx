@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './ProductList.css'
 import CartItem from './CartItem';
+import { addItem } from './CartSlice';
+
 function ProductList({ onHomeClick }) {
     const [showCart, setShowCart] = useState(false);
     const [showPlants, setShowPlants] = useState(false); // State to control the visibility of the About Us page
+    const [addedToCart, setAddedToCart] = useState({}); // to track products added to the cart
+
 
     const plantsArray = [
         {
@@ -244,14 +248,24 @@ function ProductList({ onHomeClick }) {
     };
     const handlePlantsClick = (e) => {
         e.preventDefault();
-        setShowPlants(true); // Set showAboutUs to true when "About Us" link is clicked
+        setShowPlants(true); // Set showPlants to true when "About Us" link is clicked ???
         setShowCart(false); // Hide the cart when navigating to About Us
     };
 
     const handleContinueShopping = (e) => {
         e.preventDefault();
-        setShowCart(false);
+        setShowCart(false); // Set showCart to false when cart icon is clicked
     };
+
+    const handleAddToCart = (product) => {
+        dispatch(addItem(product)); // Dispatch the action to add the product to the cart (Redux action)
+
+        setAddedToCart((prevState) => ({ // Update the local state to reflect that the product has been added
+            ...prevState, // Spread the previous state to retain existing entries
+            [product.name]: true, // Set the current product's name as a key with value 'true' to mark it as added
+        }));
+    };
+
     return (
         <div>
             <div className="navbar" style={styleObj}>
